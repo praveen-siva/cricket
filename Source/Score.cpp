@@ -31,6 +31,7 @@ ScoreCard::ScoreCard(char Ings,char *TeamName)
        strcpy(Team2,TeamName);
 
     BatsMan_Init();
+    OpeningBatsman();
    
 
 #if 0
@@ -128,11 +129,16 @@ int ScoreCard::BatsmanCard()
 {
     if(BATSMAN == 1)
     {
-	if(Wicket==1)
+	if(ItsOut=='Y' || ItsOut == 'y')
+	{
+	    OutBatsmanDetails();
 	    strcpy(Batsman1_Ings.Batsman,BatsmanName[Wicket-1]);
+	}
 	else
+	{
 	    strcpy(Batsman1_Ings.Batsman,BatsmanName[Wicket]);
-        Batsman1_Ings.Run_Batsman=Batsman1_Ings.Run_Batsman+Run;
+            Batsman1_Ings.Run_Batsman=Batsman1_Ings.Run_Batsman+Run;
+	}
 	if(Run == 4)
     	    Batsman1_Ings.Batsman_4s=Batsman1_Ings.Batsman_4s+1;		
         if(Run == 6)
@@ -141,18 +147,49 @@ int ScoreCard::BatsmanCard()
     }
     if(BATSMAN == 2)
     {
-	if(Wicket==1)
-	    strcpy(Batsman1_Ings.Batsman,BatsmanName[Wicket]);
+	if(ItsOut=='Y' || ItsOut == 'y')
+	{
+	    OutBatsmanDetails();
+	    strcpy(Batsman2_Ings.Batsman,BatsmanName[Wicket]);
+	}
 	else
-	    strcpy(Batsman1_Ings.Batsman,BatsmanName[Wicket+1]);
-	//strcpy(Batsman2_Ings.Batsman,BATTING(Wicket));
-        Batsman2_Ings.Run_Batsman=Batsman2_Ings.Run_Batsman+Run;
+	{
+	    strcpy(Batsman2_Ings.Batsman,BatsmanName[Wicket+1]);
+	    //strcpy(Batsman2_Ings.Batsman,BATTING(Wicket));
+            Batsman2_Ings.Run_Batsman=Batsman2_Ings.Run_Batsman+Run;
+	}
 	if(Run == 4)
     	    Batsman2_Ings.Batsman_4s=Batsman2_Ings.Batsman_4s+1;		
         if(Run == 6)
 	    Batsman2_Ings.Batsman_6s=Batsman2_Ings.Batsman_6s+1;
-        Batsman2_Ings.Ball_Batsman=Batsman2_Ings.Ball_Batsman+1;
+            Batsman2_Ings.Ball_Batsman=Batsman2_Ings.Ball_Batsman+1;
     }
+    return 0;
+}
+
+int ScoreCard::OutBatsmanDetails()
+{
+    if(BATSMAN==1)
+       printf("BATSMAN1 : %s  Score: %d Balls: %d 4`s: %d 6`s: %d  \n", Batsman1_Ings.Batsman,Batsman1_Ings.Run_Batsman,Batsman1_Ings.Ball_Batsman,Batsman1_Ings.Batsman_4s,Batsman1_Ings.Batsman_6s);
+    else
+       printf("BATSMAN2 : %s  Score: %d Balls: %d 4`s: %d 6`s: %d  \n", Batsman2_Ings.Batsman,Batsman2_Ings.Run_Batsman,Batsman2_Ings.Ball_Batsman,Batsman2_Ings.Batsman_4s,Batsman2_Ings.Batsman_6s);
+    
+    return 0;
+}
+
+int ScoreCard::OpeningBatsman()
+{
+    strcpy(Batsman1_Ings.Batsman,BatsmanName[0]);
+    Batsman1_Ings.Run_Batsman=0;
+    Batsman1_Ings.Batsman_4s=0;
+    Batsman1_Ings.Batsman_6s=0;   
+    Batsman1_Ings.Ball_Batsman=0;
+    strcpy(Batsman2_Ings.Batsman,BatsmanName[1]);
+    Batsman2_Ings.Run_Batsman=0;
+    Batsman2_Ings.Batsman_4s=0;
+    Batsman2_Ings.Batsman_6s=0;   
+    Batsman2_Ings.Ball_Batsman=0;
+
     return 0;
 }
 
@@ -246,6 +283,17 @@ int ScoreCard::WicketChange()
        std::map<int,Batsman_t>::iterator its = BatsmanStatus.find(Wicket+1);
 	if(its != BatsmanStatus.end())
 	    its->second=Batsman2_Ings;
+#if 0
+    if(BATSMAN==2)
+    {
+       std::map<int,Batsman_t>::iterator it = BatsmanStatus.find(Wicket+1);
+	if(it != BatsmanStatus.end())
+	    it->second=Batsman1_Ings;
+       std::map<int,Batsman_t>::iterator its = BatsmanStatus.find(Wicket+2);
+	if(its != BatsmanStatus.end())
+	    its->second=Batsman2_Ings;
+    }
+#endif
     return 0;
 }
 

@@ -53,6 +53,8 @@ public:
     int BattingDetails();
     int BatsMan_Init();
     int WicketChange();
+    int OutBatsmanDetails();
+    int OpeningBatsman();
 };
 
 #endif
