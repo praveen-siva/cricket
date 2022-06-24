@@ -1,0 +1,18 @@
+SHMFLAGS += -fPIC
+SHMFLAGS += -shared 
+
+SHARED_LIBS= shared-lib
+OBJECT_FILES= $(DEV_SRCS:.cpp=.o)
+
+all: $(SHARED_LIBS)
+	$(COMPILER)  Dev_Main.o ./$(INST_SHLIBS).so -o $(OUTPUT)
+
+shared-lib: $(OBJECT_FILES)
+	$(COMPILER) $(VPATH) $(LDFLAGS) $(CPPFLAGS) $(SHMFLAGS) $(libDEV_SRCS) -o $(INST_SHLIBS).so
+	#install -m 777 $(INST_SHLIBS).so ../Libraries
+
+%.o: %.cpp
+	$(COMPILER) $(CPPFLAGS) $(VPATH) -c $<
+
+clean:
+	rm -rf *.o *.so
